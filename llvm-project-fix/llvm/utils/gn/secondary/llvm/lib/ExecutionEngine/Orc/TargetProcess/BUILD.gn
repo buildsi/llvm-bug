@@ -1,0 +1,14 @@
+static_library("TargetProcess") {
+  output_name = "LLVMOrcTargetProcess"
+  deps = [
+    "//llvm/lib/ExecutionEngine/Orc/Shared",
+    "//llvm/lib/Support",
+  ]
+  sources = [
+    "JITLoaderGDB.cpp",
+    "OrcRTBootstrap.cpp",
+    "RegisterEHFrames.cpp",
+    "SimpleRemoteEPCServer.cpp",
+    "TargetExecutionUtils.cpp",
+  ]
+}
