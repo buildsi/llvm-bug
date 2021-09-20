@@ -70,7 +70,28 @@ $ docker cp ddedd8597804:/build-abi-test-tim/libfoo.so libfoo.so
 
 ### 3. Compare
 
-**under development!** Smeagle is not done yet.
+The easiest thing to do is to dump assembly and see if they are different.
+If the fix has no influence on the register allocation, they should be.
+
+```bash
+$ objdump -d libfoo.so > libfoo.asm
+$ objdump -d libfoo-fix.so > libfoo-fix.asm
+```
+
+And then do a diff
+
+```bash
+$ diff libfoo-fix.asm libfoo.asm > libfoo.diff
+```
+
+All three are provided in this repository:
+
+ - [libfoo.asm](libfoo.asm)
+ - [libfoo-fix.asm](libfoo-fix.asm)
+ - [libfoo.diff](libfoo.diff)
+
+
+We can eventually test with Smeagle or other tools, but this isn't done yet.
 
 We can then test with (not finished yet) Smeagle
 
