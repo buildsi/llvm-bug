@@ -1,0 +1,65 @@
+2c2
+< libfoo.so:     file format elf64-x86-64
+---
+> libfoo-fix.so:     file format elf64-x86-64
+97,105c97,105
+<     1120:	c5 fb 11 84 24 e8 00 	vmovsd %xmm0,0xe8(%rsp)
+<     1127:	00 00 
+<     1129:	89 bc 24 dc 00 00 00 	mov    %edi,0xdc(%rsp)
+<     1130:	89 b4 24 d8 00 00 00 	mov    %esi,0xd8(%rsp)
+<     1137:	89 8c 24 d4 00 00 00 	mov    %ecx,0xd4(%rsp)
+<     113e:	44 89 84 24 d0 00 00 	mov    %r8d,0xd0(%rsp)
+<     1145:	00 
+<     1146:	db bc 24 c0 00 00 00 	fstpt  0xc0(%rsp)
+<     114d:	c5 fb 11 8c 24 b8 00 	vmovsd %xmm1,0xb8(%rsp)
+---
+>     1120:	89 bc 24 dc 00 00 00 	mov    %edi,0xdc(%rsp)
+>     1127:	89 b4 24 d8 00 00 00 	mov    %esi,0xd8(%rsp)
+>     112e:	89 8c 24 d4 00 00 00 	mov    %ecx,0xd4(%rsp)
+>     1135:	44 89 84 24 d0 00 00 	mov    %r8d,0xd0(%rsp)
+>     113c:	00 
+>     113d:	db bc 24 c0 00 00 00 	fstpt  0xc0(%rsp)
+>     1144:	c5 fb 11 84 24 b8 00 	vmovsd %xmm0,0xb8(%rsp)
+>     114b:	00 00 
+>     114d:	c5 fc 29 8c 24 80 00 	vmovaps %ymm1,0x80(%rsp)
+107,117c107,117
+<     1156:	c5 fc 29 94 24 80 00 	vmovaps %ymm2,0x80(%rsp)
+<     115d:	00 00 
+<     115f:	62 f1 7c 48 29 5c 24 	vmovaps %zmm3,0x40(%rsp)
+<     1166:	01 
+<     1167:	c5 fb 11 64 24 38    	vmovsd %xmm4,0x38(%rsp)
+<     116d:	44 89 4c 24 34       	mov    %r9d,0x34(%rsp)
+<     1172:	48 89 ec             	mov    %rbp,%rsp
+<     1175:	5d                   	pop    %rbp
+<     1176:	c5 f8 77             	vzeroupper 
+<     1179:	c3                   	retq   
+<     117a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+---
+>     1156:	62 f1 7c 48 29 54 24 	vmovaps %zmm2,0x40(%rsp)
+>     115d:	01 
+>     115e:	c5 fb 11 5c 24 38    	vmovsd %xmm3,0x38(%rsp)
+>     1164:	44 89 4c 24 34       	mov    %r9d,0x34(%rsp)
+>     1169:	48 89 ec             	mov    %rbp,%rsp
+>     116c:	5d                   	pop    %rbp
+>     116d:	c5 f8 77             	vzeroupper 
+>     1170:	c3                   	retq   
+>     1171:	66 66 66 66 66 66 2e 	data16 data16 data16 data16 data16 nopw %cs:0x0(%rax,%rax,1)
+>     1178:	0f 1f 84 00 00 00 00 
+>     117f:	00 
+147,154c147,153
+<     11b4:	c5 fa 6f 05 54 0e 00 	vmovdqu 0xe54(%rip),%xmm0        # 2010 <_fini+0xd4c>
+<     11bb:	00 
+<     11bc:	c5 f9 7f 45 f0       	vmovdqa %xmm0,-0x10(%rbp)
+<     11c1:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
+<     11c5:	c5 fb 10 45 f8       	vmovsd -0x8(%rbp),%xmm0
+<     11ca:	5d                   	pop    %rbp
+<     11cb:	c3                   	retq   
+<     11cc:	0f 1f 40 00          	nopl   0x0(%rax)
+---
+>     11b4:	48 8b 05 55 0e 00 00 	mov    0xe55(%rip),%rax        # 2010 <_fini+0xd4c>
+>     11bb:	48 89 45 f0          	mov    %rax,-0x10(%rbp)
+>     11bf:	48 8b 05 52 0e 00 00 	mov    0xe52(%rip),%rax        # 2018 <_fini+0xd54>
+>     11c6:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
+>     11ca:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
+>     11ce:	5d                   	pop    %rbp
+>     11cf:	c3                   	retq   
