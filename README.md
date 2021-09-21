@@ -8,7 +8,34 @@ different binaries (I believe it should not if the detail truly does not matter)
 - [llvm-project](llvm-project) was cloned around 7am September 16
 - [llvm-project-fix](llvm-project-fix) is an identical copy of that, but with a fix for the bug above.
 
-For both, we will build side by side containers.
+For both, we will build side by side containers. The bug is in [this file](https://github.com/buildsi/llvm-bug/blob/main/llvm-project-fix/clang/lib/CodeGen/TargetInfo.cpp) and here is the diff between the "fix" (what I wrote) and the current implementation (at the time I cloned it). Here is the original (postMerge)
+
+```cpp
+  if (Hi == Memory)
+    Lo = Memory;
+  if (Hi == X87Up && Lo != X87 && honorsRevision0_98())
+    Lo = Memory;
+  if (AggregateSize > 128 && (Lo != SSE || Hi != SSEUp))
+    Lo = Memory;
+  if (Hi == SSEUp && Lo != SSE)
+    Hi = SSE;
+```
+And what I changed it to, to reflect the ABI document (because they said if one OR the other).
+
+```cpp
+  if (Hi == Memory)
+    Lo = Memory;
+  if (Lo == Memory)
+    Hi = Memory;
+  if (Hi == X87Up && Lo != X87 && honorsRevision0_98())
+    Lo = Memory;
+    Hi = Memory;
+  if (AggregateSize > 128 && (Lo != SSE || Hi != SSEUp))
+    Lo = Memory;
+    Hi = Memory;
+  if (Hi == SSEUp && Lo != SSE)
+    Hi = SSE;
+```
 
 ## Usage
 
