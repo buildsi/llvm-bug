@@ -66,26 +66,35 @@ below, we are going to test this simple script from [build-abi-tests-tim](https:
 
 
 ```bash
-$ docker run -it llvm-project:latest bash
+$ docker run -it vanessa/llvm-project:latest bash
 
 # This is where clang is
 $ cd /
+$ export PATH=/opt/spack/opt/spack/linux-ubuntu18.04-skylake/gcc-11.0.1/llvm-main-m22s4pslanvkggagt4kz3n4ae7precgl/bin:$PATH
+
 $ git clone https://github.com/buildsi/build-abi-test-tim
 $ cd build-abi-test-tim
-$ export PATH=/opt/software/linux-ubuntu18.04-skylake/gcc-11.0.1/llvm-main-m22s4pslanvkggagt4kz3n4ae7precgl/bin/:$PATH
 $ clang -g -fPIC -shared -march=skylake-avx512 -o libfoo.so foo.c
 ```
 
-And for the fix (the container is a bit different because I installed to spack instead
-of /opt/software).
+Now you can compile different things with clang to see print output:
+
+```bash
+$ clang -g -fPIC -shared -march=skylake-avx512 -o libfoo.so foo.c
+Final state Lo: 0 Hi: 1
+Final state Lo: 0 Hi: 1
+```
 
 ```bash
 $ docker run -it vanessa/llvm-project-fix:latest bash
-$ export PATH=/opt/spack/opt/spack/linux-ubuntu18.04-skylake/gcc-11.0.1/llvm-main-m22s4pslanvkggagt4kz3n4ae7precgl/bin:$PATH
 $ cd /
+$ export PATH=/opt/spack/opt/spack/linux-ubuntu18.04-skylake/gcc-11.0.1/llvm-main-m22s4pslanvkggagt4kz3n4ae7precgl/bin:$PATH
+
 $ git clone https://github.com/buildsi/build-abi-test-tim
 $ cd build-abi-test-tim
 $ clang -g -fPIC -shared -march=skylake-avx512 -o libfoo.so foo.c
+FIX: Final state Lo: 0 Hi: 1
+FIX: Final state Lo: 0 Hi: 1
 ```
 
 For both, copy the files outside of the container for further inspection.

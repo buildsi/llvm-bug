@@ -11,6 +11,9 @@
 //
 //===----------------------------------------------------------------------===//
 
+#include <cstddef>
+#include <ostream>
+#include <iostream>
 #include "TargetInfo.h"
 #include "ABIInfo.h"
 #include "CGBlocks.h"
@@ -2746,14 +2749,25 @@ void X86_64ABIInfo::postMerge(unsigned AggregateSize, Class &Lo,
   //
   // Note that clauses (b) and (c) were added in 0.98.
   //
-  if (Hi == Memory)
+  using namespace std;
+
+  if (Hi == Memory) {
+    std::cout << "Aggregate size: " << AggregateSize << " Lo: " << Lo << " Hi: " << Hi << "triggered by Hi==Memory" << std::endl;
     Lo = Memory;
-  if (Hi == X87Up && Lo != X87 && honorsRevision0_98())
+  };
+  if (Hi == X87Up && Lo != X87 && honorsRevision0_98()) {
+    std::cout << "Aggregate size: " << AggregateSize << " Lo: " << Lo << " Hi: " << Hi << "triggered by third to last" << std::endl;
     Lo = Memory;
-  if (AggregateSize > 128 && (Lo != SSE || Hi != SSEUp))
+  };
+  if (AggregateSize > 128 && (Lo != SSE || Hi != SSEUp)) {
+    std::cout << "Aggregate size: " << AggregateSize << " Lo: " << Lo << " Hi: " << Hi << "triggered by second to last" << std::endl;
     Lo = Memory;
-  if (Hi == SSEUp && Lo != SSE)
+  };
+  if (Hi == SSEUp && Lo != SSE) {
+    std::cout << "Aggregate size: " << AggregateSize << " Lo: " << Lo << " Hi: " << Hi << "triggered by last" << std::endl;
     Hi = SSE;
+  };
+  std::cout << "Final state Lo: " <<  Lo  << " Hi: " << Hi << std::endl;
 }
 
 X86_64ABIInfo::Class X86_64ABIInfo::merge(Class Accum, Class Field) {
