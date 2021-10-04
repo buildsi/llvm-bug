@@ -92,6 +92,7 @@
 #include <bitset>
 #include <cassert>
 #include <cctype>
+#include <cstddef>
 #include <cstdint>
 #include <functional>
 #include <limits>
