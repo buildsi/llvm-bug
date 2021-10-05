@@ -39,7 +39,7 @@ Testing without the fix, we can compare the output for gcc and clang.
 $ docker run -it -v $PWD:/data vanessa/llvm-project:latest bash
 
 # Add compilers to the path
-# export PATH=/opt/software/linux-ubuntu18.04-skylake/gcc-11.0.1/llvm-main-m22s4pslanvkggagt4kz3n4ae7precgl/bin/:$PATH
+# export PATH=/opt/spack/opt/spack/linux-ubuntu18.04-skylake/gcc-11.0.1/llvm-main-m22s4pslanvkggagt4kz3n4ae7precgl/bin:$PATH
 ```
 
 Just to know what we are working with:
